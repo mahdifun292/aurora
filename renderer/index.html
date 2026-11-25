@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en" data-theme="midnight">
+<head>
+  <meta charset="utf-8" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' aurora: data: blob: http: https:; media-src 'self' aurora: blob: http: https:; connect-src 'self' aurora:; font-src 'self' data:;"
+  />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aurora</title>
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+
+  <!-- ambient background -->
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+    <div class="ambient-blob blob-3"></div>
+    <div class="ambient-grain"></div>
+  </div>
+
+  <header id="titlebar">
+    <div class="tb-brand">
+      <span class="tb-logo" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <defs>
+            <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#b49cff"/>
+              <stop offset="1" stop-color="#6ee7ff"/>
+            </linearGradient>
+          </defs>
+          <circle cx="16" cy="16" r="12" stroke="url(#lg)" stroke-width="2.2"/>
+          <circle cx="16" cy="16" r="3.2" fill="url(#lg)"/>
+          <path d="M16 4a12 12 0 0 1 12 12" stroke="#fff" stroke-opacity=".35" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="tb-title">Aurora</span>
+    </div>
+    <div class="tb-drag"></div>
+    <div class="tb-actions">
+      <button class="winbtn" data-win="minimize" title="Minimize" aria-label="Minimize">
+        <svg viewBox="0 0 12 12"><path d="M2 6h8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </button>
+      <button class="winbtn" data-win="maximize" title="Maximize" aria-label="Maximize" id="win-max">
+        <svg viewBox="0 0 12 12"><rect x="2.2" y="2.2" width="7.6" height="7.6" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+      <button class="winbtn winbtn-close" data-win="close" title="Close" aria-label="Close">
+        <svg viewBox="0 0 12 12"><path d="m2.6 2.6 6.8 6.8M9.4 2.6 2.6 9.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="shell">
+    <aside id="sidebar">
+      <div class="sidebar-scroll">
+        <div class="brand">
+          <div class="brand-mark">
+            <svg viewBox="0 0 32 32" fill="none">
+              <defs>
+                <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#c4b5fd"/>
+                  <stop offset=".55" stop-color="#8b5cf6"/>
+                  <stop offset="1" stop-color="#22d3ee"/>
+                </linearGradient>
+              </defs>
+              <circle cx="16" cy="16" r="13" stroke="url(#bg-grad)" stroke-width="2"/>
+              <circle cx="16" cy="16" r="3.4" fill="url(#bg-grad)"/>
+              <path d="M16 3a13 13 0 0 1 13 13" stroke="#fff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">Aurora</span>
+            <span class="brand-sub">music, illuminated</span>
+          </div>
+        </div>
+
+        <div class="source-switch" id="source-switch"></div>
+
+        <nav class="nav" id="nav">
+          <button class="nav-item" data-route="home"><span class="nav-ico" data-ico="home"></span><span>Home</span></button>
+          <button class="nav-item" data-route="songs"><span class="nav-ico" data-ico="music"></span><span>Songs</span></button>
+          <button class="nav-item" data-route="albums"><span class="nav-ico" data-ico="disc"></span><span>Albums</span></button>
+          <button class="nav-item" data-route="artists"><span class="nav-ico" data-ico="mic"></span><span>Artists</span></button>
+          <button class="nav-item" data-route="playlists"><span class="nav-ico" data-ico="listMusic"></span><span>Playlists</span></button>
+          <button class="nav-item" data-route="favorites"><span class="nav-ico" data-ico="heart"></span><span>Favorites</span></button>
+        </nav>
+
+        <div class="sidebar-section">
+          <div class="section-head">
+            <span>Your playlists</span>
+            <button class="mini-btn" data-action="new-playlist" title="New playlist" id="new-playlist-btn">+</button>
+          </div>
+          <div class="playlist-nav" id="playlist-nav"></div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="nav-item" data-route="settings"><span class="nav-ico" data-ico="settings"></span><span>Settings</span></button>
+        <div class="server-status" id="server-status"></div>
+      </div>
+    </aside>
+
+    <main id="main">
+      <header id="topbar">
+        <div class="history-btns">
+          <button class="iconbtn" data-nav="back" title="Back" aria-label="Back" id="nav-back"></button>
+          <button class="iconbtn" data-nav="forward" title="Forward" aria-label="Forward" id="nav-forward"></button>
+        </div>
+
+        <label class="searchbox" id="searchbox">
+          <span data-ico="search" class="search-ico"></span>
+          <input id="search" type="text" placeholder="Search songs, albums, artists…" autocomplete="off" spellcheck="false" />
+          <kbd id="search-kbd">Ctrl K</kbd>
+          <button class="search-clear" data-action="clear-search" aria-label="Clear search" hidden>×</button>
+        </label>
+
+        <div class="top-actions" id="top-actions"></div>
+      </header>
+
+      <div id="view" class="view" tabindex="-1"></div>
+    </main>
+
+    <aside id="queue-panel" class="queue-panel" aria-label="Play queue">
+      <header class="qp-head">
+        <div>
+          <h2>Queue</h2>
+          <p id="queue-context">Nothing queued</p>
+        </div>
+        <button class="iconbtn" data-action="close-queue" title="Close queue" data-ico="x"></button>
+      </header>
+      <div class="qp-list" id="queue-list"></div>
+      <footer class="qp-foot">
+        <button class="ghost-btn" data-action="clear-queue">Clear queue</button>
+        <button class="ghost-btn" data-action="queue-to-playlist">Save as playlist</button>
+      </footer>
+    </aside>
+  </div>
+
+  <footer id="playerbar">
+    <div class="pb-left">
+      <button class="pb-cover" id="pb-cover" data-player="expand" title="Open now playing" aria-label="Open now playing"></button>
+      <div class="pb-info">
+        <div class="pb-title" id="pb-title">Nothing playing</div>
+        <div class="pb-artist" id="pb-artist">Pick something beautiful</div>
+      </div>
+      <button class="iconbtn pb-fav" data-action="fav-current" id="pb-fav" title="Add to favorites" data-ico="heart"></button>
+    </div>
+
+    <div class="pb-center">
+      <div class="pb-controls">
+        <button class="iconbtn" data-player="shuffle" id="pb-shuffle" title="Shuffle" data-ico="shuffle"></button>
+        <button class="iconbtn" data-player="prev" title="Previous" data-ico="skipBack"></button>
+        <button class="playbtn" data-player="toggle" id="pb-toggle" title="Play / pause" aria-label="Play or pause">
+          <span class="pb-icon-play" data-ico="play"></span>
+          <span class="pb-icon-pause" data-ico="pause"></span>
+        </button>
+        <button class="iconbtn" data-player="next" title="Next" data-ico="skipForward"></button>
+        <button class="iconbtn" data-player="repeat" id="pb-repeat" title="Repeat" data-ico="repeat"></button>
+      </div>
+      <div class="pb-progress">
+        <span class="time" id="pb-current">0:00</span>
+        <div class="progress" id="pb-progress" role="slider" aria-label="Seek" tabindex="0">
+          <div class="progress-buffer"></div>
+          <div class="progress-fill"><span class="progress-thumb"></span></div>
+        </div>
+        <span class="time" id="pb-total">0:00</span>
+      </div>
+    </div>
+
+    <div class="pb-right">
+      <button class="iconbtn" data-player="open-lyrics" title="Lyrics" data-ico="lyrics"></button>
+      <button class="iconbtn" data-action="toggle-queue" id="pb-queue" title="Queue" data-ico="queue"></button>
+      <div class="volume" id="volume-wrap">
+        <button class="iconbtn" data-player="mute" id="pb-mute" title="Mute" data-ico="volume"></button>
+        <div class="volume-track" id="volume-track" role="slider" aria-label="Volume" tabindex="0">
+          <div class="volume-fill" id="volume-fill"></div>
+        </div>
+      </div>
+      <button class="iconbtn" data-player="expand" title="Now playing" data-ico="expand"></button>
+    </div>
+  </footer>
+
+  <!-- Now playing / lyrics -->
+  <section id="np" class="nowplaying" hidden aria-label="Now playing">
+    <div class="np-backdrop" id="np-backdrop"></div>
+    <div class="np-veil"></div>
+
+    <header class="np-head">
+      <button class="iconbtn" data-action="close-np" title="Close" data-ico="chevronDown"></button>
+      <div class="np-head-label"><span>Now playing</span><span class="np-head-dot"></span><span id="np-context"></span></div>
+      <button class="iconbtn" data-action="toggle-queue" title="Queue" data-ico="queue"></button>
+    </header>
+
+    <div class="np-body">
+      <div class="np-left">
+        <div class="np-art-wrap">
+          <div class="np-art" id="np-art"></div>
+          <div class="np-art-glow" id="np-art-glow"></div>
+        </div>
+
+        <div class="np-meta">
+          <div class="np-eyebrow" id="np-album">—</div>
+          <h1 class="np-title" id="np-title">Nothing playing</h1>
+          <p class="np-artist" id="np-artist">Pick something beautiful</p>
+        </div>
+
+        <div class="np-actions">
+          <button class="iconbtn round" data-action="fav-current" id="np-fav" title="Favorite" data-ico="heart"></button>
+          <button class="iconbtn round" data-action="add-current-to-playlist" title="Add to playlist" data-ico="plus"></button>
+          <button class="iconbtn round" data-action="go-to-album" id="np-goto" title="Go to album" data-ico="external"></button>
+        </div>
+
+        <div class="np-progress">
+          <div class="progress" id="np-progress" role="slider" aria-label="Seek" tabindex="0">
+            <div class="progress-buffer"></div>
+            <div class="progress-fill"><span class="progress-thumb"></span></div>
+          </div>
+          <div class="np-times"><span id="np-current">0:00</span><span id="np-total">0:00</span></div>
+        </div>
+
+        <div class="np-controls">
+          <button class="iconbtn" data-player="shuffle" id="np-shuffle" title="Shuffle" data-ico="shuffle"></button>
+          <button class="iconbtn big" data-player="prev" title="Previous" data-ico="skipBack"></button>
+          <button class="playbtn xl" data-player="toggle" id="np-toggle" title="Play / pause">
+            <span class="pb-icon-play" data-ico="play"></span>
+            <span class="pb-icon-pause" data-ico="pause"></span>
+          </button>
+          <button class="iconbtn big" data-player="next" title="Next" data-ico="skipForward"></button>
+          <button class="iconbtn" data-player="repeat" id="np-repeat" title="Repeat" data-ico="repeat"></button>
+        </div>
+
+        <div class="eq" id="np-eq" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="np-right">
+        <div class="np-lyrics-head">
+          <div class="np-lyrics-title">Lyrics <span class="lyrics-badge" id="np-lyrics-badge"></span></div>
+          <div class="lyrics-tools">
+            <span class="lyrics-tools-label">Offset</span>
+            <button class="mini-btn" data-action="lyrics-offset-down" title="Earlier">−</button>
+            <span class="lyrics-offset" id="lyrics-offset">0.0s</span>
+            <button class="mini-btn" data-action="lyrics-offset-up" title="Later">+</button>
+            <button class="mini-btn reset" data-action="lyrics-offset-reset" title="Reset offset" data-ico="refresh"></button>
+          </div>
+        </div>
+        <div class="lyrics-view" id="np-lyrics">
+          <div class="lyrics-viewport">
+            <div class="lyrics-lines"></div>
+          </div>
+          <div class="lyrics-fade top"></div>
+          <div class="lyrics-fade bottom"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="modal-root"></div>
+  <div id="bulk-bar" class="bulk-bar" hidden>
+    <div class="bulk-info"><span class="bulk-dot"></span><strong id="bulk-count">0</strong><span>selected</span></div>
+    <button class="ghost-btn" data-action="bulk-select-all">Select all shown</button>
+    <span class="bulk-spacer"></span>
+    <button class="btn btn-soft btn-sm" data-action="bulk-add-playlist"><span data-ico="plus"></span> Add to playlist</button>
+    <button class="btn btn-primary btn-sm" data-action="bulk-new-playlist"><span data-ico="listMusic"></span> New playlist</button>
+    <button class="iconbtn" data-action="exit-select-mode" title="Exit selection" data-ico="x"></button>
+  </div>
+  <div id="toasts" aria-live="polite"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

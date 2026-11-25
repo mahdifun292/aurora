@@ -1,0 +1,91 @@
+{
+  "name": "aurora-music",
+  "productName": "Aurora",
+  "version": "1.0.0",
+  "description": "A Feishin-inspired desktop music player with a beautiful interface and synced lyrics.",
+  "main": "electron/main.js",
+  "author": {
+    "name": "Aurora",
+    "email": "hello@aurora-player.dev"
+  },
+  "homepage": "https://github.com/aurora-player/aurora",
+  "desktopName": "Aurora",
+  "license": "MIT",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "start:unsafe": "electron . --no-sandbox",
+    "demo": "node scripts/make-demo.js",
+    "mock": "node scripts/mock-server.js",
+    "dist": "electron-builder",
+    "dist:linux": "electron-builder --linux AppImage deb",
+    "dist:win": "electron-builder --win nsis",
+    "dist:win:zip": "electron-builder --win zip",
+    "dist:win:portable": "electron-builder --win portable",
+    "dist:mac": "electron-builder --mac dmg"
+  },
+  "keywords": [
+    "music",
+    "player",
+    "electron",
+    "navidrome",
+    "subsonic",
+    "lyrics"
+  ],
+  "dependencies": {
+    "music-metadata": "^12.3.4"
+  },
+  "devDependencies": {
+    "electron": "^45.2.2",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "dev.aurora.player",
+    "productName": "Aurora",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**/*",
+      "renderer/**/*",
+      "package.json"
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "AudioVideo",
+      "icon": "build/icon.png",
+      "maintainer": "Aurora <hello@aurora-player.dev>",
+      "synopsis": "Beautiful desktop music player with synced lyrics",
+      "syncDesktopName": true
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Aurora",
+      "artifactName": "Aurora-Setup-${version}.${ext}",
+      "deleteAppDataOnUninstall": false
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.music",
+      "icon": "build/icon.png"
+    }
+  }
+}
