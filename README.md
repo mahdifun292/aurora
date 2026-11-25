@@ -101,6 +101,20 @@ sudo dpkg -i dist/aurora-music_1.0.0_amd64.deb
 
 > اگر AppImage روی سیستم شما به‌دلیل sandbox اجرا نشد، از `./dist/Aurora-1.0.0.AppImage --no-sandbox` استفاده کنید.
 
+### ساخت خودکار با GitHub Actions
+
+ورکفلوی [`.github/workflows/build.yml`](.github/workflows/build.yml) نسخه‌های لینوکس و ویندوز را به‌صورت خودکار می‌سازد:
+
+- **Linux** (`ubuntu-latest`) → `Aurora-1.0.0.AppImage` و `aurora-music_1.0.0_amd64.deb`
+- **Windows** (`windows-latest`) → `Aurora-Setup-1.0.0.exe`
+
+با هر push روی `main` یا اجرای دستی (`workflow_dispatch`) فایل‌ها به‌عنوان artifact در تب **Actions** آپلود می‌شوند. برای انتشار خودکار در بخش **Releases** کافی است یک تگ نسخه push کنید:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
 ### ساخت نسخهٔ ویندوز
 
 **روش ۱ — روی ویندوز (پیشنهادی و مطمئن‌ترین):**
